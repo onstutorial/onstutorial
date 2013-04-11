@@ -1,4 +1,4 @@
-This repo contains code needed for ONS tutorials, as well as a wiki with instructions.  To get started with the tutorial, go to the [tutorial home page](github.com/onstutorial/onstutorial/wiki).
+This repo contains code needed for ONS tutorials, as well as a wiki with instructions.  To get started, go to the [tutorial home page](http://github.com/onstutorial/onstutorial/wiki).
 
 Below are instructions for generating the VM used in the tutorial:
 
