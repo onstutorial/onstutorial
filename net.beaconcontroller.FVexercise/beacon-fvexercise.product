@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Beacon Controller" uid="beacon-learningswitch" version="1.0.2" useFeatures="false" includeLaunchers="true">
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console</programArgs>
+      <vmArgs>-server
+-Declipse.ignoreApp=true
+-Dosgi.noShutdown=true
+-Dequinox.ds.print=true
+-XX:+AggressiveOpts
+-Xmx3000M
+-XX:InlineSmallCode=16384
+-XX:MaxInlineSize=16384
+-XX:FreqInlineSize=16384</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+   </launcherArgs>
+
+   <windowImages/>
+
+   <launcher name="beacon">
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+      <plugin id="ch.qos.logback.classic"/>
+      <plugin id="ch.qos.logback.core"/>
+      <plugin id="com.springsource.net.sf.cglib"/>
+      <plugin id="com.springsource.org.aopalliance"/>
+      <plugin id="jcl.over.slf4j"/>
+      <plugin id="net.beaconcontroller.FVexercise"/>
+      <plugin id="net.beaconcontroller.core"/>
+      <plugin id="net.beaconcontroller.logging.bridge"/>
+      <plugin id="net.beaconcontroller.logging.config" fragment="true"/>
+      <plugin id="net.beaconcontroller.packet"/>
+      <plugin id="net.beaconcontroller.util"/>
+      <plugin id="org.apache.commons.io"/>
+      <plugin id="org.eclipse.equinox.ds" version="1.2.0.v20100507"/>
+      <plugin id="org.eclipse.equinox.log"/>
+      <plugin id="org.eclipse.equinox.util"/>
+      <plugin id="org.eclipse.osgi" version="3.6.0.v20100517"/>
+      <plugin id="org.eclipse.osgi.services"/>
+      <plugin id="org.openflow"/>
+      <plugin id="org.springframework.aop"/>
+      <plugin id="org.springframework.asm"/>
+      <plugin id="org.springframework.beans"/>
+      <plugin id="org.springframework.context"/>
+      <plugin id="org.springframework.context.support"/>
+      <plugin id="org.springframework.core"/>
+      <plugin id="org.springframework.expression"/>
+      <plugin id="org.springframework.osgi.core"/>
+      <plugin id="org.springframework.osgi.extender"/>
+      <plugin id="org.springframework.osgi.extensions.annotations"/>
+      <plugin id="org.springframework.osgi.io"/>
+      <plugin id="slf4j.api"/>
+   </plugins>
+
+   <configurations>
+      <plugin id="ch.qos.logback.classic" autoStart="true" startLevel="0" />
+      <plugin id="ch.qos.logback.core" autoStart="true" startLevel="0" />
+      <plugin id="com.springsource.net.sf.cglib" autoStart="true" startLevel="0" />
+      <plugin id="com.springsource.org.aopalliance" autoStart="true" startLevel="0" />
+      <plugin id="jcl.over.slf4j" autoStart="true" startLevel="0" />
+      <plugin id="net.beaconcontroller.FVexercise" autoStart="true" startLevel="0" />
+      <plugin id="net.beaconcontroller.core" autoStart="true" startLevel="0" />
+      <plugin id="net.beaconcontroller.logging.bridge" autoStart="true" startLevel="1" />
+      <plugin id="net.beaconcontroller.packet" autoStart="true" startLevel="0" />
+      <plugin id="net.beaconcontroller.util" autoStart="true" startLevel="0" />
+      <plugin id="org.apache.commons.io" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.log" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.util" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+      <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
+      <plugin id="org.openflow" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.aop" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.asm" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.beans" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.context" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.context.support" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.core" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.expression" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.osgi.core" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.osgi.extender" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.osgi.extensions.annotations" autoStart="true" startLevel="0" />
+      <plugin id="org.springframework.osgi.io" autoStart="true" startLevel="0" />
+      <plugin id="slf4j.api" autoStart="true" startLevel="0" />
+   </configurations>
+
+</product>
