@@ -69,7 +69,7 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
             action = new OFActionOutput().setPort(outports[i]);
             actions.add(action);
         }
-        fm.setBufferId(-1).setCommand(OFFlowMod.OFPFC_ADD).setIdleTimeout((short) 0)
+        fm.setBufferId(-1).setCommand(OFFlowMod.OFPFC_ADD).setIdleTimeout((short) 5)
         .setMatch(match).setActions(actions);
         log.info("Flow Mod: {}",fm.toString());
         try {
