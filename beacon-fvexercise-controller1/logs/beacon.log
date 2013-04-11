@@ -1,0 +1,3 @@
+09:26:38.131 [SpringOsgiExtenderThread-3] INFO  n.b.core.internal.Controller - Beacon Core Started
+09:26:38.131 [pool-2-thread-1] INFO  n.b.core.internal.Controller - Started thread Thread[pool-2-thread-1,5,spring-osgi-extender[2de12f6d]-threads] for IOLoop IOLoop [id=0 stream_count=0]
+09:26:38.200 [SpringOsgiExtenderThread-4] INFO  n.b.core.internal.Controller - Controller listening on *:6633
