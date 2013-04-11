@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import org.openflow.protocol.OFFlowMod;
 import org.openflow.protocol.OFMatch;
 import org.openflow.protocol.OFMessage;
+import org.openflow.protocol.OFPacketIn;
+import org.openflow.protocol.OFPacketOut;
 import org.openflow.protocol.OFType;
 import org.openflow.protocol.action.OFAction;
 import org.openflow.protocol.action.OFActionOutput;
@@ -29,6 +31,10 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
     @Override
     public Command receive(IOFSwitch sw, OFMessage msg) throws IOException {
         // TODO Auto-generated method stub
+        OFPacketIn pi = (OFPacketIn) msg;
+        OFMatch match = OFMatch.load(pi.getPacketData(), pi.getInPort());
+        routePacket(sw,match);
+        
         return Command.CONTINUE;
     }
 
@@ -55,9 +61,7 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
         return "FlowVisor Exercise";
     }
 
-    private void instllEntry(IOFSwitch sw, String dmac, short inport, short[] outports) {
-        OFMatch match = new OFMatch();
-        int wildcard = OFMatch.OFPFW_ALL;
+    private void installEntry(IOFSwitch sw, OFMatch match, short[] outports) {
         OFFlowMod fm = new OFFlowMod();
         OFAction action;
         ArrayList<OFAction> actions = new ArrayList<OFAction>();
@@ -65,15 +69,6 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
             action = new OFActionOutput().setPort(outports[i]);
             actions.add(action);
         }
-        if (dmac != "") {
-            match.setDataLayerDestination(Ethernet.toMACAddress(dmac));
-            wildcard &= ~(OFMatch.OFPFW_DL_DST);
-        }
-        if (inport != 0) {
-            match.setInputPort(inport);
-            wildcard &= ~(OFMatch.OFPFW_IN_PORT);
-        }
-        match.setWildcards(wildcard);
         fm.setBufferId(-1).setCommand(OFFlowMod.OFPFC_ADD).setIdleTimeout((short) 0)
         .setMatch(match).setActions(actions);
         log.info("Flow Mod: {}",fm.toString());
@@ -86,30 +81,42 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
     
     @Override
     public void addedSwitch(IOFSwitch sw) {
+    }
+        
+    private void routePacket(IOFSwitch sw, OFMatch match){
         
         long dpid = sw.getId();
-        log.info("switch joined with dpid {}", dpid);        
+        long dmac = Ethernet.toLong(match.getDataLayerDestination());
+       
         if (dpid == 1) {
-            instllEntry(sw,"00:00:00:00:00:01",(short)0,new short[] {3});
-            instllEntry(sw,"00:00:00:00:00:02",(short)0,new short[] {4});
-            instllEntry(sw,"00:00:00:00:00:03",(short)0,new short[] {1});
-            instllEntry(sw,"00:00:00:00:00:03",(short)0,new short[] {2});
-            instllEntry(sw,"00:00:00:00:00:04",(short)0,new short[] {1});
-            instllEntry(sw,"00:00:00:00:00:04",(short)0,new short[] {2});
+            if (dmac == 1) installEntry(sw,match,new short[] {3});
+            else if (dmac == 2) installEntry(sw,match,new short[] {4});
+            else if (dmac == 3) {
+                installEntry(sw,match,new short[] {1});
+                installEntry(sw,match,new short[] {2});
+            }
+            else if (dmac == 4) {
+                installEntry(sw,match,new short[] {1});
+                installEntry(sw,match,new short[] {2});
+            }
         }
         if (dpid == 4) {
-            instllEntry(sw,"00:00:00:00:00:01",(short)0,new short[] {1});
-            instllEntry(sw,"00:00:00:00:00:01",(short)0,new short[] {2});
-            instllEntry(sw,"00:00:00:00:00:02",(short)0,new short[] {1});
-            instllEntry(sw,"00:00:00:00:00:02",(short)0,new short[] {2});
-            instllEntry(sw,"00:00:00:00:00:03",(short)0,new short[] {3});
-            instllEntry(sw,"00:00:00:00:00:04",(short)0,new short[] {4});
+            if (dmac == 3) installEntry(sw,match,new short[] {3});
+            else if (dmac == 4) installEntry(sw,match,new short[] {4});
+            else if (dmac == 1) {
+                installEntry(sw,match,new short[] {1});
+                installEntry(sw,match,new short[] {2});
+            }
+            else if (dmac == 2) {
+                installEntry(sw,match,new short[] {1});
+                installEntry(sw,match,new short[] {2});
+            }
         }
         if (dpid == 2 || dpid == 3) {
-            instllEntry(sw,"00:00:00:00:00:01",(short)0,new short[] {1});
-            instllEntry(sw,"00:00:00:00:00:02",(short)0,new short[] {1});
-            instllEntry(sw,"00:00:00:00:00:03",(short)0,new short[] {2});
-            instllEntry(sw,"00:00:00:00:00:04",(short)0,new short[] {2});
+            if (dmac == 1) installEntry(sw,match,new short[] {1});
+            else if (dmac == 2) installEntry(sw,match,new short[] {1});
+            else if (dmac == 3) installEntry(sw,match,new short[] {2});
+            else if (dmac == 4) installEntry(sw,match,new short[] {2});
         }
     }
 
