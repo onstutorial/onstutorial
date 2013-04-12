@@ -1,5 +1,5 @@
 #!/bin/sh
-sudo /etc/init.d/flowvisor restart
+#sudo /etc/init.d/flowvisor restart
 
 fvctl -f /dev/null add-slice upper tcp:localhost:10001 admin@upperslice
 fvctl -f /dev/null add-slice lower tcp:localhost:10002 admin@lowerslice
