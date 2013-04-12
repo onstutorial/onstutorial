@@ -2,6 +2,7 @@ package net.beaconcontroller.FVexercise;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.openflow.protocol.OFFlowMod;
 import org.openflow.protocol.OFMatch;
@@ -32,9 +33,7 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
     public Command receive(IOFSwitch sw, OFMessage msg) throws IOException {
         // TODO Auto-generated method stub
         OFPacketIn pi = (OFPacketIn) msg;
-        OFMatch match = OFMatch.load(pi.getPacketData(), pi.getInPort());
-        routePacket(sw,match);
-        
+        routePacket(sw,pi);
         return Command.CONTINUE;
     }
 
@@ -61,7 +60,7 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
         return "FlowVisor Exercise";
     }
 
-    private void installEntry(IOFSwitch sw, OFMatch match, short[] outports) {
+    private void installEntry(IOFSwitch sw, OFPacketIn pi, OFMatch match, short[] outports) {
         OFFlowMod fm = new OFFlowMod();
         OFAction action;
         ArrayList<OFAction> actions = new ArrayList<OFAction>();
@@ -77,46 +76,59 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
         } catch (IOException e) {
             log.error("Failure writing FlowMod", e);
         }
+        if (pi.getBufferId() == OFPacketOut.BUFFER_ID_NONE) {
+            log.info("Packet out event triggered");
+            OFPacketOut po = new OFPacketOut();
+            po.setActions(actions);
+            po.setBufferId(OFPacketOut.BUFFER_ID_NONE);
+            po.setInPort(pi.getInPort());
+            po.setPacketData(pi.getPacketData());
+            try {
+                sw.getOutputStream().write(po);
+            } catch (IOException e) {
+                log.error("Failure writing FlowMod", e);
+            }
+        }
     }
     
     @Override
     public void addedSwitch(IOFSwitch sw) {
     }
         
-    private void routePacket(IOFSwitch sw, OFMatch match){
-        
+    private void routePacket(IOFSwitch sw, OFPacketIn pi){
+        OFMatch match = OFMatch.load(pi.getPacketData(), pi.getInPort());
         long dpid = sw.getId();
         long dmac = Ethernet.toLong(match.getDataLayerDestination());
        
         if (dpid == 1) {
-            if (dmac == 1) installEntry(sw,match,new short[] {3});
-            else if (dmac == 2) installEntry(sw,match,new short[] {4});
+            if (dmac == 1) installEntry(sw,pi,match,new short[] {3});
+            else if (dmac == 2) installEntry(sw,pi,match,new short[] {4});
             else if (dmac == 3) {
-                installEntry(sw,match,new short[] {1});
-                installEntry(sw,match,new short[] {2});
+                installEntry(sw,pi,match,new short[] {1});
+                installEntry(sw,pi,match,new short[] {2});
             }
             else if (dmac == 4) {
-                installEntry(sw,match,new short[] {1});
-                installEntry(sw,match,new short[] {2});
+                installEntry(sw,pi,match,new short[] {1});
+                installEntry(sw,pi,match,new short[] {2});
             }
         }
         if (dpid == 4) {
-            if (dmac == 3) installEntry(sw,match,new short[] {3});
-            else if (dmac == 4) installEntry(sw,match,new short[] {4});
+            if (dmac == 3) installEntry(sw,pi,match,new short[] {3});
+            else if (dmac == 4) installEntry(sw,pi,match,new short[] {4});
             else if (dmac == 1) {
-                installEntry(sw,match,new short[] {1});
-                installEntry(sw,match,new short[] {2});
+                installEntry(sw,pi,match,new short[] {1});
+                installEntry(sw,pi,match,new short[] {2});
             }
             else if (dmac == 2) {
-                installEntry(sw,match,new short[] {1});
-                installEntry(sw,match,new short[] {2});
+                installEntry(sw,pi,match,new short[] {1});
+                installEntry(sw,pi,match,new short[] {2});
             }
         }
         if (dpid == 2 || dpid == 3) {
-            if (dmac == 1) installEntry(sw,match,new short[] {1});
-            else if (dmac == 2) installEntry(sw,match,new short[] {1});
-            else if (dmac == 3) installEntry(sw,match,new short[] {2});
-            else if (dmac == 4) installEntry(sw,match,new short[] {2});
+            if (dmac == 1) installEntry(sw,pi,match,new short[] {1});
+            else if (dmac == 2) installEntry(sw,pi,match,new short[] {1});
+            else if (dmac == 3) installEntry(sw,pi,match,new short[] {2});
+            else if (dmac == 4) installEntry(sw,pi,match,new short[] {2});
         }
     }
 
