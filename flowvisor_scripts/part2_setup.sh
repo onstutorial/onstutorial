@@ -1,4 +1,10 @@
 #!/bin/sh
+fvctl -f /dev/null remove-slice upper
+fvctl -f /dev/null remove-slice lower
+# Just in case:
+fvctl -f /dev/null remove-slice video
+fvctl -f /dev/null remove-slice non-video
+
 fvctl -f /dev/null add-slice video tcp:localhost:10001 admin@videoslice
 fvctl -f /dev/null add-slice non-video tcp:localhost:10002 admin@nonvideoslice
 
