@@ -22,9 +22,18 @@ sudo apt-get install libxslt-dev libxml2-dev
 sudo gem install gollum
 sudo gem install wikicloth
 # this breaks at the end, when it's making documentation, but it still loads pages just fine.
-# Create desktop shortcut
+```
+
+Create useful desktop shortcuts.
+```
 # Name: ONS Tutorial Instructions
 # Exec: /usr/bin/chromium-browser localhost:4567
+# Icon: www-browser
+```
+```
+# Name: Update ONS Tutorial
+# Exec: lxterminal -e '/home/mininet/onstutorial.wiki/update.sh'
+# Icon: default (no line needed, gear icon makes sense)
 ```
 
 Set up Gollum to show instructions on boot, using Upstart, by making a file, /etc/init/gollum.conf, with these contents:
