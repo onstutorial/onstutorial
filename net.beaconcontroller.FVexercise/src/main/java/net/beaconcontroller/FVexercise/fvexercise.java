@@ -68,7 +68,7 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
             action = new OFActionOutput().setPort(outports[i]);
             actions.add(action);
         }
-        fm.setBufferId(-1).setCommand(OFFlowMod.OFPFC_ADD).setIdleTimeout((short) 5)
+        fm.setBufferId(pi.getBufferId()).setCommand(OFFlowMod.OFPFC_ADD).setIdleTimeout((short) 5)
         .setMatch(match).setActions(actions);
         log.info("Flow Mod: {}",fm.toString());
         try {
@@ -86,7 +86,7 @@ public class fvexercise implements IOFMessageListener, IOFSwitchListener {
             try {
                 sw.getOutputStream().write(po);
             } catch (IOException e) {
-                log.error("Failure writing FlowMod", e);
+                log.error("Sending a packet out", e);
             }
         }
     }
