@@ -2,7 +2,6 @@ package net.beaconcontroller.FVexercise;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.openflow.protocol.OFFlowMod;
 import org.openflow.protocol.OFMatch;
@@ -19,7 +18,6 @@ import net.beaconcontroller.core.IBeaconProvider;
 import net.beaconcontroller.core.IOFMessageListener;
 import net.beaconcontroller.core.IOFSwitch;
 import net.beaconcontroller.core.IOFSwitchListener;
-import net.beaconcontroller.core.IOFMessageListener.Command;
 import net.beaconcontroller.packet.Ethernet;
 
 
