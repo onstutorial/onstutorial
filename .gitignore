@@ -1,0 +1,6 @@
+**/bin
+**/logs
+*.class
+beacon-fvexercise-controller1/configuration/org.eclipse.osgi
+beacon-fvexercise-controller2/configuration/org.eclipse.osgi
+
